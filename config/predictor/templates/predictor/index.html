@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Internship Projects</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            min-height: 100vh;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+        }
+
+        /* HEADER */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 60px;
+        }
+
+        .top-bar div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 130px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 14px;
+        }
+
+        /* TITLE */
+        .main-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .main-title h1 {
+            font-size: 33px;
+            font-weight: 1000;
+        }
+
+        /* 🔥 TECHNOLOGIES SECTION */
+        .tech-section {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .tech-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .tech-logos {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .tech-logos img {
+            width: 190px;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        /* PROJECTS */
+        .projects {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .project-card {
+            width: 260px;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: scale(1.05);
+        }
+
+        .project-card h5 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .project-card p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .acharya-logo {
+            height: 170px;   /* bigger than Karunadu */
+            margin-right: 35px; 
+        }
+
+        .main-content {
+            margin-left: 70px;  /* 👈 shift everything right */
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- TOP LOGOS -->
+<div class="top-bar">
+
+    <img src="{% static 'images/karunadu.png' %}" class="logo-img">
+
+    <div>
+        {% if user.is_authenticated %}
+            <span style="margin-right:15px;">Welcome, {{ user.username }}</span>
+            <a href="/logout/" class="btn btn-danger btn-sm">Logout</a>
+        {% else %}
+            <a href="/login/" class="btn btn-light btn-sm me-2">Login</a>
+            <a href="/signup/" class="btn btn-success btn-sm">Signup</a>
+        {% endif %}
+    </div>
+
+    <img src="{% static 'images/acharya.png' %}" class="logo-img acharya-logo">
+
+</div>
+
+<!-- MAIN CONTENT WRAPPER -->
+<div class="main-content">
+<!-- TITLE -->
+    <div class="main-title">
+        <h1>PYTHON PROGRAMMING AND APPLIED MACHINE LEARNING</h1>
+        <h2>INTERNSHIP PROJECTS</h2>
+        <p>Machine Learning Based Projects</p>
+    </div>
+
+    <!-- 🔥 TECHNOLOGIES USED -->
+    <div class="tech-section">
+        <div class="tech-title">Technologies Used</div>
+
+        <div class="tech-logos">
+            <img src="{% static 'images/ml.png' %}">
+            <img src="{% static 'images/python.png' %}">
+            <img src="{% static 'images/django.png' %}">
+        </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="projects">
+
+        <div class="project-card" onclick="location.href='/migraine/'">
+            <h5>Migraine Type Classification</h5>
+            <p>Using Machine Learning</p>
+        </div>
+
+        <div class="project-card" onclick="location.href='/mobile/'">
+            <h5>Mobile Phone Price Classification</h5>
+            <p>Using Machine Learning</p>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>INTERNSHIP @ KARUNADU TECHNOLOGIES PVT LTD</p>
+        <p>
+            HARSHITHA M V | 1AY22AI038 | Final Year | Department of AI and ML |
+            Acharya Institute of Technology, Bangalore
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

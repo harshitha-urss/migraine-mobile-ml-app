@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mobile Price Prediction</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43);
+            color: white;
+        }
+
+        .card {
+            background: #1c2b33;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .form-control {
+            height: 35px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08) !important;
+            color: #ffffff !important; 
+        }
+
+        .instructions {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0,255,200,0.08);
+            border: 1px solid rgba(0,255,200,0.25);
+            color: #ffffff;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+       /* WHEN TYPING / FOCUSED */
+        .form-control:focus {
+            background: rgba(255,255,255,0.08) !important;
+            color: #ffffff !important;
+            border-color: #00c6ff;
+            box-shadow: 0 0 8px rgba(0,198,255,0.4);
+        }
+
+        /* REMOVE WHITE AUTOFILL (CHROME FIX) */
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.08) inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        .form-control::placeholder {
+            color: #cccccc;
+            background: #0f2027;
+            border: 1px solid #00c6ff;
+        }
+
+        label {
+            font-size: 12px;
+            color: #ffffff;   /* 👈 ADD THIS */
+            opacity: 1; 
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 10px;
+            height: 40px;
+            font-weight: 600;
+        }
+
+        .result-box {
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0,255,200,0.1);
+            border: 1px solid rgba(0,255,200,0.3);
+            color: #ffffff;
+        }
+
+        select.form-control {
+            background: rgba(255,255,255,0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        select.form-control option {
+            background: #1c2b33;
+            color: #ffffff;
+        }
+
+        h2 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;   /* 👈 IMPORTANT */
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px 20px;
+            font-size: 13px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5 mb-5">
+    <div class="card">
+
+        <h2 class="text-center">MOBILE PRICE PREDICTION</h2>
+
+        <!-- Info Box -->
+        <div class="result-box mb-4">
+            <h6>Price Range Meaning</h6>
+            <p style="font-size:13px;">
+                0 = Low Cost | 1 = Medium Cost | 2 = High Cost | 3 = Very High Cost
+            </p>
+        </div>
+
+        <div class="instructions">
+    <h5 style="color:#00ffcc;">Feature Guide</h5>
+
+    <div class="feature-grid">
+        <div><b>Battery:</b> 500–2000 mAh</div>
+        <div><b>Bluetooth:</b> 0 = No, 1 = Yes</div>
+        <div><b>Clock Speed:</b> 0.5–3.0 GHz</div>
+        <div><b>Dual SIM:</b> 0 = No, 1 = Yes</div>
+        <div><b>Front Camera:</b> 0–20 MP</div>
+        <div><b>4G:</b> 0 = No, 1 = Yes</div>
+        <div><b>Memory:</b> 2–64 GB</div>
+        <div><b>Thickness:</b> 0.1–1.0 cm</div>
+        <div><b>Weight:</b> 80–250 g</div>
+        <div><b>CPU Cores:</b> 1–8</div>
+        <div><b>Primary Camera:</b> 0–20 MP</div>
+        <div><b>Resolution:</b> 0–2000 px</div>
+        <div><b>RAM:</b> 256–4000 MB</div>
+        <div><b>Screen Size:</b> 5–20 cm</div>
+        <div><b>Talk Time:</b> 2–20 hrs</div>
+        <div><b>3G / Touch / WiFi:</b> 0 = No, 1 = Yes</div>
+    </div>
+</div>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                {% for feature in features %}
+                <div>
+                    <label>
+                        {% if feature == "fc" %}Front Camera (MP)
+                        {% elif feature == "pc" %}Primary Camera (MP)
+                        {% elif feature == "ram" %}RAM (MB)
+                        {% elif feature == "px_height" %}Pixel Height
+                        {% elif feature == "px_width" %}Pixel Width
+                        {% elif feature == "battery_power" %}Battery (mAh)
+                        {% else %}{{ feature }}
+                        {% endif %}
+                    </label>
+
+                    {% if feature in "blue dual_sim four_g three_g touch_screen wifi" %}
+                        <select name="{{ feature }}" class="form-control">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+
+                    {% elif feature == "battery_power" %}
+                        <input type="number" name="{{ feature }}" min="500" max="2000" 
+                        oninput="this.value=this.value.slice(0,4); if(this.value>2000) this.value=2000;"
+                        class="form-control" required>
+
+                    {% elif feature == "ram" %}
+                        <input type="number" name="{{ feature }}" min="256" max="4000" 
+                        oninput="this.value=this.value.slice(0,4); if(this.value>4000) this.value=4000;"
+                        class="form-control" required>
+
+                    {% elif feature == "n_cores" %}
+                        <input type="number" name="{{ feature }}" min="1" max="8"
+                        oninput="if(this.value>8) this.value=8;"
+                        class="form-control" required>
+
+                    {% elif feature == "clock_speed" %}
+                        <input type="number" name="{{ feature }}" min="0.5" max="3.0" step="0.1"
+                        oninput="if(this.value>3) this.value=3;"
+                        class="form-control" required>
+
+                    {% elif feature == "fc" or feature == "pc" %}
+                        <input type="number" name="{{ feature }}" min="0" max="20" 
+                        oninput="if(this.value>20) this.value=20;"
+                        class="form-control" required>
+
+                    {% elif feature == "int_memory" %}
+                        <input type="number" name="{{ feature }}" min="2" max="64" 
+                        oninput="if(this.value>64) this.value=64;"
+                        class="form-control" required>
+
+                    {% elif feature == "m_dep" %}
+                        <input type="number" name="{{ feature }}" min="0.1" max="1.0" step="0.1" 
+                        oninput="if(this.value>1) this.value=1;"
+                        class="form-control" required>
+
+                    {% elif feature == "mobile_wt" %}
+                        <input type="number" name="{{ feature }}" min="80" max="250" 
+                        oninput="if(this.value>250) this.value=250;"
+                        class="form-control" required>
+
+                    {% elif feature == "px_height" or feature == "px_width" %}
+                        <input type="number" name="{{ feature }}" min="0" max="2000" 
+                        oninput="if(this.value>2000) this.value=2000;"
+                        class="form-control" required>
+
+                    {% elif feature == "sc_h" %}
+                        <input type="number" name="{{ feature }}" min="5" max="20" 
+                        oninput="if(this.value>20) this.value=20;"
+                        class="form-control" required>
+
+                    {% elif feature == "sc_w" %}
+                        <input type="number" name="{{ feature }}" min="0" max="20" 
+                        oninput="if(this.value>20) this.value=20;"
+                        class="form-control" required>
+
+                    {% elif feature == "talk_time" %}
+                        <input type="number" name="{{ feature }}" min="2" max="20" 
+                        oninput="if(this.value>20) this.value=20;"
+                        class="form-control" required>
+
+                    {% else %}
+                        <input type="number" name="{{ feature }}" class="form-control" required>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+
+                <button class="btn btn-primary" style="width:200px;">Predict</button>
+
+                {% if result %}
+                <div class="result-box" style="width:50%;">
+                    <h5>Prediction</h5>
+                    <h4 style="color:#00ffcc;">{{ result }}</h4>
+                </div>
+                {% endif %}
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
